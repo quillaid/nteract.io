@@ -19,8 +19,7 @@ describe("changelog content utilities", () => {
     const entries = await getAllEntries(all);
 
     expect(entries.map((entry) => entry.version)).toEqual([
-      "2.5.1",
-      "2.5.0",
+      "2.5",
       "2.4",
       "2.3",
       "2.2",
@@ -30,10 +29,21 @@ describe("changelog content utilities", () => {
 
   it("hides unpublished entries from default lookups", async () => {
     const published = await getAllEntries();
-    const draft = await getEntryByVersion("2.5.0");
+    const draft = await getEntryByVersion("2.5");
 
-    expect(published.some((entry) => entry.version === "2.5.0")).toBe(false);
+    expect(published.some((entry) => entry.version === "2.5")).toBe(false);
     expect(draft).toBeNull();
+  });
+
+  it("redirects collapsed patch versions to the grouped 2.5 entry", async () => {
+    expect(await resolveVersionParam("2.5.0", all)).toEqual({
+      kind: "redirect",
+      version: "2.5",
+    });
+    expect(await resolveVersionParam("2.5.1", all)).toEqual({
+      kind: "redirect",
+      version: "2.5",
+    });
   });
 
   it("redirects a covered patch version to its canonical entry", async () => {

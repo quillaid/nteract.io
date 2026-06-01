@@ -1,35 +1,58 @@
 ---
-version: "2.5.0"
-date: "2026-05-26T17:26:23Z"
+version: "2.5"
+date: "2026-05-26T19:55:28Z"
 coversVersions:
   - "2.5.0"
+  - "2.5.1"
 dateLabel: "May 26, 2026"
-title: "TODO — write the headline (the payload, not 'v2.5.0 released')"
-summary: "TODO — one sentence describing this release to a notebook user."
+title: "Hidden Secrets, Sift DataFrames"
+summary: "The nteract launcher is now the default, bringing rich Python tracebacks, DataFrames in the Sift explorer, and secrets kept out of your outputs."
 highlights:
-  - "redact environment values from outputs"
-  - "import login-shell env into kernels via per-launch env_vars"
-  - "make runtime state execution id only"
-  - "materialize execution view in wasm"
+  - "The nteract launcher runs by default now (legacy launcher is opt-out)"
+  - "Python errors render as rich, structured tracebacks"
+  - "DataFrames open in Sift, an interactive crossfilter explorer"
+  - "Outputs scrub secret-looking environment values to [redacted env]"
 tags:
   - "Outputs"
   - "Agents"
   - "Collaboration"
   - "Environments"
-githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.5.0-stable.202605261709"
+githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.5.1-stable.202605261941"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-{/* TODO — optional opening paragraph: what changed in this release and why it matters. Delete if not needed. */}
+The headline of 2.5 isn't in the commit list. It's one flag.
+
+The **nteract launcher** is now the default. The launcher that used to be opt-in runs for everyone, with a legacy-launcher escape hatch if you need it. That single flip is the story, because the launcher is what makes three things real in every notebook.
+
+## Rich tracebacks
+
+Python errors stop being a wall of ANSI text. The launcher emits a structured traceback that nteract renders frame by frame: your code split from library internals, source context and line numbers inline, the noise filtered out.
+
+## DataFrames open in Sift
+
+Return a DataFrame and it renders in **Sift**, an interactive crossfilter explorer. Histograms and category bars live in the column headers, you brush-filter across columns at once, and it stays smooth well past 100k rows (Arrow IPC and WASM underneath). No `dx` package, nothing to import.
+
+## Secrets stay out of outputs
+
+2.5 also pulls your login-shell environment into kernels, so the `PATH` and variables you actually have set are there. Redaction is the safety valve: before any output leaves the kernel, values that look like secrets are scrubbed to `[redacted env]`. Your shell's secrets are available to your code, but they don't leak into a shared notebook or an agent's view. On by default, per-kernel opt-out.
 
 ## Full technical changelog
 
 <details>
-<summary>All 231 changes in 2.5.0</summary>
+<summary>All 232 changes across 2.5.0 and 2.5.1</summary>
 
-### Features
+### 2.5.1 — May 26, 2026
+
+#### Bug Fixes
+
+- avoid framed output shell (#3013) *(mcp-app)*([261953e](https://github.com/nteract/nteract/commit/261953ec0c6739810872f73630eba61426ade9f4))
+
+### 2.5.0 — May 26, 2026
+
+#### Features
 
 - redact environment values from outputs (#2610) *(runtime)*([c7bf704](https://github.com/nteract/nteract/commit/c7bf704352a8e1b3f0623a181f1cd38412e6d052))
 - import login-shell env into kernels via per-launch env_vars (#2767) *(runtimed)*([e73be9d](https://github.com/nteract/nteract/commit/e73be9df47f29ac3cea507499a6fda63ac4f3fc4))
@@ -82,7 +105,7 @@ published: false
 - expose notebook cell resources *(mcp)*([929caa0](https://github.com/nteract/nteract/commit/929caa00755a0af18de34f5408f18fe94eb64146))
 - annotate notebook resources (#2972) *(mcp)*([c9e9483](https://github.com/nteract/nteract/commit/c9e9483a4dbbf3783aa08063026a3602c3574e5f))
 
-### Bug Fixes
+#### Bug Fixes
 
 - source shell startup env for kernels (#2770) *(runtime)*([124dae7](https://github.com/nteract/nteract/commit/124dae7ffee59cf30d029c43812337433f4472bb))
 - surface notebook execution and output summaries (#2769) *(runt-mcp)*([daaf0b0](https://github.com/nteract/nteract/commit/daaf0b0851b8ebebbbbcdc3abc0887d0dfa4e1fc))
@@ -214,7 +237,7 @@ published: false
 - keep LLM previews out of MIME selection (#3011) *(renderer)*([5b85903](https://github.com/nteract/nteract/commit/5b85903851a39a9f0e93f99c62f81e274f50de34))
 - respect host frame CSP (#3012) *(mcp-app)*([e47811e](https://github.com/nteract/nteract/commit/e47811e19ae422537cec01cdadadcd197445e0b7))
 
-### Performance
+#### Performance
 
 - defer optional renderer imports (#2887) *(kernel-launcher)*([6c2090e](https://github.com/nteract/nteract/commit/6c2090e7343e7ef4261aa4bd69e797359c89b456))
 - optimize output redaction matching *(runtime)*([54020a4](https://github.com/nteract/nteract/commit/54020a41fd91d600c6f041949832f6a41283a0ba))
@@ -232,7 +255,7 @@ published: false
 - split structural output updates (#2984) *(notebook)*([64247dd](https://github.com/nteract/nteract/commit/64247dd828eccce59805ae5ed2f8576794d537ef))
 - reduce streaming table rerenders (#2988) *(frontend)*([730b522](https://github.com/nteract/nteract/commit/730b5220c8866e7033a92543b3b31d3f645aa09d))
 
-### Documentation
+#### Documentation
 
 - explain why daemon.json fallback stays (#2775) *(runtimed-client)*([ea708db](https://github.com/nteract/nteract/commit/ea708db8b42ed5da2085e46eb190838f87bd82f1))
 - update execution-id runtime-state plan (#2800) *(runtime)*([6435f32](https://github.com/nteract/nteract/commit/6435f32b12cd9a6ab357ae1ad3c1e6d038086e4b))
