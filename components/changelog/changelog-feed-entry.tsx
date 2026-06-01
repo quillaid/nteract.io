@@ -1,18 +1,24 @@
+import type { ReactNode } from "react";
+
 import Link from "next/link";
 
 import { BlogTagList } from "@/components/blog/tag-list";
+import { Prose } from "@/components/prose";
 import { formatEntryDate, type ChangelogEntrySummary } from "@/lib/changelog";
 
 type ChangelogFeedEntryProps = {
   entry: ChangelogEntrySummary;
+  /** The entry's MDX body, rendered inline in the feed. */
+  children?: ReactNode;
 };
 
 /**
- * One release rendered inline in the scrolling feed: version + date in a left
- * rail, the human story on the right. The title and hero both link to the
- * shareable per-version page. The full technical changelog lives there, not here.
+ * One release rendered in full inline in the scrolling feed: version + date in
+ * a left rail, the whole story on the right (highlights, hero, and the MDX
+ * body, whose exhaustive technical changelog stays inside its collapsed
+ * disclosure). The version and date link to the shareable per-version page.
  */
-export function ChangelogFeedEntry({ entry }: ChangelogFeedEntryProps) {
+export function ChangelogFeedEntry({ entry, children }: ChangelogFeedEntryProps) {
   const href = `/changelog/${entry.version}`;
 
   return (
@@ -66,9 +72,9 @@ export function ChangelogFeedEntry({ entry }: ChangelogFeedEntryProps) {
             </ul>
           ) : null}
 
-          {/* Hero preview — driven by heroVideo / heroImage frontmatter */}
+          {/* Hero — driven by heroVideo / heroImage frontmatter */}
           {entry.heroVideo ? (
-            <Link href={href} className="mb-6 block overflow-hidden">
+            <div className="mb-6 overflow-hidden">
               <video
                 src={entry.heroVideo}
                 autoPlay
@@ -77,20 +83,25 @@ export function ChangelogFeedEntry({ entry }: ChangelogFeedEntryProps) {
                 playsInline
                 className="w-full"
               />
-            </Link>
+            </div>
           ) : entry.heroImage ? (
-            <Link href={href} className="mb-6 block overflow-hidden">
+            <div className="mb-6 overflow-hidden">
               <img src={entry.heroImage} alt={entry.title} className="w-full" />
-            </Link>
+            </div>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-6">
+          {/* Full body, rendered inline */}
+          {children ? (
+            <Prose className="prose-invert max-w-2xl">{children}</Prose>
+          ) : null}
+
+          <div className="mt-8 flex flex-wrap items-center gap-6">
             <BlogTagList tags={entry.tags} />
             <Link
               href={href}
               className="font-mono text-[11px] uppercase tracking-widest text-secondary transition-colors hover:text-on-surface"
             >
-              Read the release →
+              Permalink →
             </Link>
           </div>
         </div>

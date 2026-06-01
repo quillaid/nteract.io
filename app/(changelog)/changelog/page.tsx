@@ -42,6 +42,15 @@ export default async function ChangelogPage() {
     includeUnpublished: shouldShowDrafts(host),
   });
 
+  const rendered = await Promise.all(
+    entries.map(async (entry) => {
+      const { default: Content } = await import(
+        `@/content/changelog/${entry.version}.mdx`
+      );
+      return { entry, Content };
+    }),
+  );
+
   return (
     <div className="px-6 pb-24 pt-12 md:px-12">
       <section className="mx-auto max-w-4xl">
@@ -72,10 +81,12 @@ export default async function ChangelogPage() {
           gets better, release by release.
         </p>
 
-        {entries.length > 0 ? (
+        {rendered.length > 0 ? (
           <div className="space-y-12">
-            {entries.map((entry) => (
-              <ChangelogFeedEntry key={entry.version} entry={entry} />
+            {rendered.map(({ entry, Content }) => (
+              <ChangelogFeedEntry key={entry.version} entry={entry}>
+                <Content />
+              </ChangelogFeedEntry>
             ))}
           </div>
         ) : (
