@@ -58,24 +58,22 @@ export default async function ChangelogPage() {
         <div className="mb-6 flex items-center gap-4">
           <Link
             href="/"
-            className="font-mono text-[11px] uppercase tracking-widest text-[#a993d1] transition-colors hover:text-on-surface"
+            className="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)] transition-colors hover:text-[var(--ink)]"
           >
             ← Home
           </Link>
-          <div className="h-px flex-grow bg-outline-variant/20" />
+          <div className="h-px flex-grow bg-[var(--rule)]" />
           <a
             href="/changelog/feed.xml"
-            className="font-mono text-[11px] uppercase tracking-widest text-outline-variant transition-colors hover:text-on-surface"
+            className="font-mono text-[11px] uppercase tracking-widest text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
           >
             RSS
           </a>
         </div>
 
-        <h1 className="mb-6 font-headline text-6xl font-bold leading-[0.9] tracking-tighter text-on-surface md:text-8xl">
-          Changelog
-        </h1>
+        <h1 className="text-[var(--ink)]">Changelog</h1>
 
-        <p className="mb-16 max-w-2xl text-xl leading-snug text-on-surface/60">
+        <p className="mb-16 max-w-2xl text-xl leading-snug text-[var(--muted)]">
           A local AI-native notebook workspace where humans and agents
           collaborate through the same live document and runtime. Here is how it
           gets better, release by release.
@@ -90,7 +88,7 @@ export default async function ChangelogPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-surface-container-low px-6 py-10 text-on-surface-variant">
+          <div className="border border-[var(--rule)] bg-[var(--paper-elevated)] px-6 py-10 text-[var(--muted)]">
             The first release notes are still in draft. Check back soon.
           </div>
         )}

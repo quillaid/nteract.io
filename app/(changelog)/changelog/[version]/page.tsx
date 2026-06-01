@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { BlogTagList } from "@/components/blog/tag-list";
+import { ChangelogTagList } from "@/components/changelog/tag-list";
 import { Prose } from "@/components/prose";
 import {
   formatEntryDate,
@@ -38,7 +38,8 @@ export async function generateMetadata({
 
   const { entry } = resolved;
   const canonical = absoluteUrl(`/changelog/${entry.version}`);
-  const ogImage = entry.heroImage ?? absoluteUrl(`/changelog/${entry.version}/opengraph-image`);
+  const ogImage =
+    entry.heroImage ?? absoluteUrl(`/changelog/${entry.version}/opengraph-image`);
 
   return {
     title: `nteract ${entry.version} — ${entry.title}`,
@@ -94,51 +95,51 @@ export default async function ChangelogVersionPage({
           <div className="mb-6 flex items-center gap-4">
             <Link
               href="/changelog"
-              className="font-mono text-[11px] uppercase tracking-widest text-[#a993d1] transition-colors hover:text-on-surface"
+              className="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)] transition-colors hover:text-[var(--ink)]"
             >
               ← Changelog
             </Link>
-            <div className="h-px flex-grow bg-outline-variant/20" />
+            <div className="h-px flex-grow bg-[var(--rule)]" />
             <time
               dateTime={entry.date}
-              className="font-mono text-xs uppercase tracking-widest text-secondary"
+              className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]"
             >
               {formatEntryDate(entry)}
             </time>
           </div>
 
-          <div className="mb-4 font-mono text-sm uppercase tracking-[0.25em] text-tertiary">
+          <div className="mb-4 font-mono text-sm uppercase tracking-[0.25em] text-[var(--accent)]">
             nteract {entry.version}
           </div>
 
-          <h1 className="mb-6 font-headline text-5xl font-bold leading-[0.95] tracking-tighter text-on-surface md:text-7xl">
-            {entry.title}
-          </h1>
+          <h1 className="text-[var(--ink)]">{entry.title}</h1>
 
-          <p className="mb-6 max-w-2xl text-xl leading-snug text-on-surface/60">
+          <p className="mb-6 mt-2 max-w-2xl text-xl leading-snug text-[var(--muted)]">
             {entry.summary}
           </p>
 
           <div className="flex flex-wrap items-center gap-6">
-            <BlogTagList tags={entry.tags} />
+            <ChangelogTagList tags={entry.tags} />
           </div>
         </header>
 
         {/* Hero */}
         {entry.heroVideo ? (
           <section className="mb-16">
-            <video
-              src={entry.heroVideo}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full"
-            />
+            <div className="overflow-hidden border border-[var(--rule)]">
+              <video
+                src={entry.heroVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full"
+              />
+            </div>
           </section>
         ) : entry.heroImage ? (
           <section className="mb-16">
-            <div className="aspect-video w-full overflow-hidden bg-surface-container-low">
+            <div className="aspect-video w-full overflow-hidden border border-[var(--rule)] bg-[var(--paper-elevated)]">
               <img
                 alt={entry.title}
                 className="h-full w-full object-cover"
@@ -151,18 +152,16 @@ export default async function ChangelogVersionPage({
         {/* Highlights */}
         {entry.highlights.length > 0 ? (
           <section className="mx-auto mb-16 max-w-2xl">
-            <h2 className="mb-5 font-headline text-2xl font-bold tracking-tight text-on-surface">
-              Highlights
-            </h2>
+            <h2 className="mb-5 text-2xl text-[var(--ink)]">Highlights</h2>
             <ul className="space-y-3">
               {entry.highlights.map((highlight) => (
                 <li
                   key={highlight}
-                  className="flex gap-3 text-lg text-on-surface-variant"
+                  className="flex gap-3 text-lg text-[var(--ink)]"
                 >
                   <span
                     aria-hidden="true"
-                    className="mt-[0.6rem] h-1.5 w-1.5 shrink-0 bg-tertiary"
+                    className="mt-[0.6rem] h-1.5 w-1.5 shrink-0 bg-[var(--accent)]"
                   />
                   <span className="leading-snug">{highlight}</span>
                 </li>
@@ -172,7 +171,7 @@ export default async function ChangelogVersionPage({
         ) : null}
 
         {/* Body — narrative + full technical changelog */}
-        <Prose className="prose-invert mx-auto max-w-2xl">
+        <Prose className="nteract-prose mx-auto max-w-2xl">
           <Content />
         </Prose>
 
@@ -180,15 +179,15 @@ export default async function ChangelogVersionPage({
         <div className="mx-auto mt-16 flex max-w-2xl flex-wrap items-center gap-4">
           <Link
             href="/changelog"
-            className="font-mono text-[11px] uppercase tracking-widest text-[#a993d1] transition-colors hover:text-on-surface"
+            className="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)] transition-colors hover:text-[var(--ink)]"
           >
             ← All releases
           </Link>
-          <div className="h-px flex-grow bg-outline-variant/20" />
+          <div className="h-px flex-grow bg-[var(--rule)]" />
           {entry.githubReleaseUrl ? (
             <a
               href={entry.githubReleaseUrl}
-              className="font-mono text-[11px] uppercase tracking-widest text-outline-variant transition-colors hover:text-on-surface"
+              className="font-mono text-[11px] uppercase tracking-widest text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
               rel="noreferrer"
               target="_blank"
             >
