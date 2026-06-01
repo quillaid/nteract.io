@@ -11,17 +11,17 @@ coversVersions:
   - "2.4.7"
   - "2.4.8"
 dateLabel: "May 2–14, 2026"
-title: "TODO — write the headline (the payload, not 'v2.4 released')"
-summary: "TODO — one sentence describing this release to a notebook user."
+title: "A REPL for Agents, DataFrames That Read Themselves"
+summary: "nteract ships a notebook-backed Python REPL for coding agents, and DataFrame output grows up. Rich types end to end. Inline images in tables. State that stays hot."
 highlights:
-  - "add one-shot PutBlob uploads"
-  - "add PutBlob one-shot clients"
-  - "round-trip frontend binary widget state via PutBlob"
-  - "add ephemeral durability hint"
+  - "@nteract/pi gives coding agents a persistent Python REPL with zero cold starts"
+  - "DataFrames render with rich types, inline images, and Arrow IPC under the hood"
+  - "Outputs get a mode strip: compact, expanded, or focused per cell"
+  - "Kernels launch even with no internet, falling back to cached installs"
 tags:
-  - "Outputs"
   - "Agents"
-  - "Collaboration"
+  - "Outputs"
+  - "Runtime"
   - "Environments"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.4.8-stable.202605142308"
 published: false
@@ -29,14 +29,26 @@ published: false
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-{/* TODO — optional opening paragraph: what changed in this release and why it matters. Delete if not needed. */}
+Eight patch releases folded into one. The throughline: the same runtime that powers the desktop app now shows up where agents work, and DataFrame output stopped being a flat grid of strings.
+
+## A Python REPL for coding agents
+
+`@nteract/pi` is a notebook-backed Python REPL built for Pi coding agents. It runs on `@runtimed/node`, the same daemon behind the nteract desktop app, so an agent gets a real IPython kernel with state that survives between turns. Variables, imports, and matplotlib figures stick around. Dependencies sync hot with `uv`, no kernel restart. There are no cold starts because the daemon keeps environments warm per working directory. The agent's tool calls return rich output too, including a terminal `DataTable` with per-column sparklines and a spinner in `In[*]` while the first token lands. Run `runt list` or `runt show` to inspect or open any session in the desktop app.
+
+## DataFrames that describe themselves
+
+DataFrame output grew up this cycle. Tables now travel as Arrow IPC payloads with a manifest, so the frontend and the Sift explorer read the same typed columns the kernel produced. HuggingFace rich types flow end to end, which means an image column from a parquet dataset renders inline in the table instead of as a blob of bytes. Long text rows collapse by default and expand on click. The manifest also carries precomputed hints, so an agent reading the output gets a useful summary without pulling the whole frame.
+
+## Output modes, per cell
+
+Each output now has a mode strip: compact, expanded, or focused. Compact keeps a busy notebook scannable. Focused hands the output its own scroll and sizing, which is what makes a large Sift table or an interactive iframe usable inline. Focus is magnetic now, it sticks until you click elsewhere instead of dropping the moment your pointer leaves. Small outputs lose their chrome entirely.
 
 ## Full technical changelog
 
 <details>
 <summary>All 258 changes in 2.4</summary>
 
-### 2.4.8 — May 14, 2026
+### 2.4.8 - May 14, 2026
 
 #### Features
 
@@ -66,7 +78,7 @@ published: false
 
 - clarify display update wake semantics (#2737) *(runtimed)*([60eb239](https://github.com/nteract/desktop/commit/60eb239f09f2832b8190cb5d048afc82344b4d85))
 
-### 2.4.7 — May 12, 2026
+### 2.4.7 - May 12, 2026
 
 #### Features
 
@@ -141,7 +153,7 @@ published: false
 - add design system guide (#2642)([ebb9437](https://github.com/nteract/desktop/commit/ebb9437e0b0fd70f815cba0e2fb4faf9ed51d12e))
 - add pr reviewer skill (#2672) *(agents)*([f8d54f6](https://github.com/nteract/desktop/commit/f8d54f68a236331ab67305a5b52732947ba0d344))
 
-### 2.4.6 — May 8, 2026
+### 2.4.6 - May 8, 2026
 
 #### Features
 
@@ -184,7 +196,7 @@ published: false
 - collapse 15 skills to 7 (#2578) *(skills)*([855acc8](https://github.com/nteract/desktop/commit/855acc815dfd205ca6f9198963bde1a15d7524eb))
 - expose repo skills via agents standard (#2580) *(skills)*([b88fd51](https://github.com/nteract/desktop/commit/b88fd5159d59e5ea125aa32b638c6adc3b8f716b))
 
-### 2.4.5 — May 5, 2026
+### 2.4.5 - May 5, 2026
 
 #### Bug Fixes
 
@@ -194,7 +206,7 @@ published: false
 
 - document json authority (#2554) *(settings)*([6351ba3](https://github.com/nteract/desktop/commit/6351ba3a86465787496cc0053d508cb72bade9b8))
 
-### 2.4.4 — May 5, 2026
+### 2.4.4 - May 5, 2026
 
 #### Features
 
@@ -240,7 +252,7 @@ published: false
 - refresh transaction and recovery guidance (#2531) *(automerge)*([1b8bd87](https://github.com/nteract/desktop/commit/1b8bd8750a02b7ab83c35a3e39d997dd4eb2b6c4))
 - refresh transaction guidance (#2542) *(automerge)*([b3a15f4](https://github.com/nteract/desktop/commit/b3a15f4cc920d31ea1c0e426e8eec63ce1159b77))
 
-### 2.4.2 — May 2, 2026
+### 2.4.2 - May 2, 2026
 
 #### Features
 
@@ -255,7 +267,7 @@ published: false
 - surface conda env build failures instead of silent not_started (#2487) *(runtimed)*([56ba560](https://github.com/nteract/desktop/commit/56ba560caef41106ad208a9ba15293aff45d9709))
 - detect Python version mismatch in conda:env_yml envs, guard user-managed envs (#2478) *(kernel-env)*([5f28eb6](https://github.com/nteract/desktop/commit/5f28eb667663c549a8e5035b60287665c0fb8966))
 
-### 2.4.1 — May 2, 2026
+### 2.4.1 - May 2, 2026
 
 #### Features
 
@@ -268,7 +280,7 @@ published: false
 - forward bufferPaths to iframe so binary data renders as DataView (#2474) *(widgets)*([2c04231](https://github.com/nteract/desktop/commit/2c042316cbb4ed5eeed018e6e8d41ab539267ebd))
 - coerce ipywidgets Image/Video width+height to CSS pixels (#2476) *(widgets)*([e4990de](https://github.com/nteract/desktop/commit/e4990de978a46156a07551286c0e6d1a769af3fd))
 
-### 2.4.0 — May 2, 2026
+### 2.4.0 - May 2, 2026
 
 #### Features
 

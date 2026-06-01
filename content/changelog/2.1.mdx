@@ -7,32 +7,46 @@ coversVersions:
   - "2.1.2"
   - "2.1.3"
 dateLabel: "April 6–9, 2026"
-title: "TODO — write the headline (the payload, not 'v2.1 released')"
-summary: "TODO — one sentence describing this release to a notebook user."
+title: "Agents Always On, Pixi In The Box"
+summary: "The runtime agent is on for every notebook now. Process-isolated. Pixi joins the defaults. Outputs render rich and read clean for agents."
 highlights:
-  - "replace vanilla DOM renderer with React + renderer plugins"
-  - "add async-rust-lsp plugin for tokio mutex diagnostics"
-  - "reuse pool envs for inline deps instead of rebuilding"
-  - "daemon-served renderer plugins for plotly, vega, leaflet"
+  - "Agent mode is unconditional and runs in its own isolated process"
+  - "Pixi is a first-class Python environment, alongside uv and conda"
+  - "Add packages from the notebook with pixi add / uv add and inline deps"
+  - "Plotly, Vega, Leaflet, LaTeX, audio, video, and PDF all render natively"
 tags:
-  - "Outputs"
   - "Agents"
-  - "Collaboration"
   - "Environments"
+  - "Outputs"
+  - "Runtime"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.1.3-stable.202604090105"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-{/* TODO — optional opening paragraph: what changed in this release and why it matters. Delete if not needed. */}
+2.1 is where the agent stops being a flag.
+
+For a few releases the runtime agent was opt-in, gated behind a Feature Flags toggle. In 2.1 it goes unconditional and moves into its own process. The agent runs as a sync-only subprocess that drives execution over the shared CRDT, the same document your notebook UI reads from. So a human typing in a cell and an agent running cells see one consistent state, and a crash in agent land can't take the notebook with it. Around that core shift, 2.1 also makes Pixi a real environment option and fills out the output renderers.
+
+## Agent mode is always on, and isolated
+
+The agent is no longer something you switch on. Every notebook gets one, and it lives in a separate process that talks to the daemon as a Unix-socket peer. Execution flows through the `RuntimeStateDoc` CRDT keyed by execution id, so the agent and the editor never disagree about what ran or what came back. Kernel restarts and execution provenance are tracked agent-side, and `agent_mode` persists in the settings doc so it survives daemon restarts.
+
+## Pixi is a first-class environment
+
+Pixi joins uv and conda as a default Python environment. 2.1 wires it end to end: `pixi run` kernel launch, real pool warming against managed `pixi.toml` envs via rattler, `[tool.pixi]` detection, drift checks, and a dependency panel in the header that shows what's declared. You can add packages straight from the notebook with `pixi add` and `uv add`, and inline deps reuse a warm pool env instead of rebuilding from scratch. PEP 723 script metadata is honored too.
+
+## Rich outputs, and agents that can read them
+
+The output stack moves to a React renderer with daemon-served plugins. Plotly, Vega and Vega-Lite, Leaflet-backed GeoJSON, LaTeX through KaTeX, plus audio, video, PDF, and JavaScript all render natively now. The other half of this is for agents: every visual output also synthesizes a `text/llm+plain` summary, so an agent looking at a Plotly chart or a GeoJSON map gets a readable description instead of a blob of base64.
 
 ## Full technical changelog
 
 <details>
 <summary>All 178 changes in 2.1</summary>
 
-### 2.1.3 — April 9, 2026
+### 2.1.3 - April 9, 2026
 
 #### Features
 
@@ -68,7 +82,7 @@ published: false
 
 - shrink widget bundle from 1.5 MB to 539 KB (#1628) *(mcp-app)*([50f8de5](https://github.com/nteract/desktop/commit/50f8de50fef3e7d775b0628f4eb1220784f11fad))
 
-### 2.1.2 — April 7, 2026
+### 2.1.2 - April 7, 2026
 
 #### Features
 
@@ -90,7 +104,7 @@ published: false
 
 - fix stale references and missing entries across documentation (#1590)([273fe68](https://github.com/nteract/desktop/commit/273fe68756122995dc5faa1a9e0349d9ab65c039))
 
-### 2.1.1 — April 7, 2026
+### 2.1.1 - April 7, 2026
 
 #### Features
 
@@ -107,7 +121,7 @@ published: false
 - harden prewarm import generation (#1584) *(runtimed)*([fc8a30d](https://github.com/nteract/desktop/commit/fc8a30d7cc70e8d24a03af36febfdf8cdbd34b98))
 - update RuntimeStateDoc on interrupt to clear CRDT queue (#1585) *(runtimed)*([3c17e7a](https://github.com/nteract/desktop/commit/3c17e7ad9e4d997fcf0ef12a891afdeec1f20aa5))
 
-### 2.1.0 — April 6, 2026
+### 2.1.0 - April 6, 2026
 
 #### Features
 

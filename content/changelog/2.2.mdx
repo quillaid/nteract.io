@@ -4,25 +4,39 @@ date: "2026-04-15T20:01:05Z"
 coversVersions:
   - "2.2.0"
 dateLabel: "April 15, 2026"
-title: "TODO — write the headline (the payload, not 'v2.2 released')"
-summary: "TODO — one sentence describing this release to a notebook user."
+title: "DataFrames Without the Bloat, Conda Without the Restart"
+summary: "DataFrames now stream through a blob store instead of bloating your notebook, conda kernels pick up new packages without a restart, and the whole app gets a warm Cream theme."
 highlights:
-  - "enable conda hot-sync for inline dependencies"
-  - "return per-cell outputs from run_all_cells"
-  - "content-aware multi-cell renderer with dev preview"
-  - "add 'kernel' alias for 'runtime' in create_notebook"
+  - "DataFrames render through Sift via the new dx library, keeping your .ipynb tiny"
+  - "Conda kernels hot-sync new dependencies without a restart"
+  - "Whole-app Cream theme with first-party CodeMirror syntax highlighting"
+  - "Ephemeral notebooks let agents spin up throwaway sessions"
 tags:
   - "Outputs"
-  - "Agents"
-  - "Collaboration"
   - "Environments"
+  - "Notebook editing"
+  - "Agents"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.2.0-stable.202604151939"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-{/* TODO — optional opening paragraph: what changed in this release and why it matters. Delete if not needed. */}
+2.2 is about getting big data and slow restarts out of your way.
+
+Two long-standing papercuts go away in this release. Returning a DataFrame used to dump megabytes of HTML straight into your `.ipynb`. Adding a package to a conda environment used to mean a kernel restart and losing your state. Both are fixed. The third headline is cosmetic but you'll see it everywhere: a warm Cream theme that covers the whole app, editor included.
+
+## DataFrames render through Sift, not into your notebook
+
+The new `dx` library reroutes DataFrame display. Instead of serializing a table into base64 HTML inside your cell, `dx` hands the Arrow IPC data to a content-addressed blob store and renders it through Sift, a fast grid. Your `.ipynb` stays small, the cell stays responsive, and the notebook saves with blob references rather than inline bytes. pandas, polars, pyarrow, and narwhals wrappers all ride the same Arrow path. Agents reading the notebook get a compact `text/llm+plain` column summary, dtypes, ranges, distinct values, null counts, instead of raw table data. The kernel launcher calls `dx.install()` during bootstrap, so this is on without any import.
+
+## Conda kernels hot-sync new dependencies
+
+Inline dependency hot-sync now works for conda environments, not just `uv`. Add a package to a running conda kernel and the environment syncs in place, no restart, no lost variables. Lock files for conda and pixi get persisted too, so an environment can be recreated offline later. Environment resolution itself went offline-first this release, so a flaky network at launch time is far less likely to block you.
+
+## A whole-app Cream theme
+
+Cream is a new warm color theme that covers the entire app, not just output. The editor moved to first-party CodeMirror themes and swapped Prism for Lezer static highlighting, so syntax colors are consistent and theme-aware across Classic and Cream. There's a theme picker to switch between them.
 
 ## Full technical changelog
 

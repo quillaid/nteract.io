@@ -6,32 +6,46 @@ coversVersions:
   - "2.3.1"
   - "2.3.4"
 dateLabel: "April 24–26, 2026"
-title: "TODO — write the headline (the payload, not 'v2.3 released')"
-summary: "TODO — one sentence describing this release to a notebook user."
+title: "Tracebacks You Can Read, Environments That Find Themselves"
+summary: "Python errors render frame by frame, and your project's environment file becomes the kernel without any setup."
 highlights:
-  - "move path to RuntimeStateDoc, drop NotebookAutosaved + PathChanged + frontend dirty"
-  - "per-type frame caps with warn-then-error logging"
-  - "ephemeral clone replaces Save As Copy"
-  - "scaffold ProjectContext on RuntimeStateDoc"
+  - "Rich tracebacks: errors render frame by frame with source context, your code split from library internals"
+  - "Project files drive the kernel: pyproject.toml, pixi.toml, and environment.yml are detected and used automatically"
+  - "pixi joins uv and conda as a first-class environment manager"
+  - "Native Intel Mac builds ship alongside Apple Silicon"
 tags:
   - "Outputs"
-  - "Agents"
-  - "Collaboration"
   - "Environments"
+  - "Desktop"
+  - "Agents"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.3.4-stable.202604261517"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-{/* TODO — optional opening paragraph: what changed in this release and why it matters. Delete if not needed. */}
+Two things get less annoying in 2.3: reading errors, and getting the right environment.
+
+Both used to need a person in the loop. A traceback was a wall of text you scanned by hand. An environment was something you set up before the notebook would run the way your project expected. 2.3 takes the manual step out of both.
+
+## Rich tracebacks
+
+When your code raises, nteract renders the traceback frame by frame instead of dumping a block of ANSI text. Your code is split from library internals, source context shows inline with the failing line highlighted, and deep stacks like a `RecursionError` collapse to head and tail so the payload stays readable. The kernel-launcher builds a structured payload and the notebook renders it, with one hard rule: if anything in that path fails, you still get the plain traceback. You never lose the error.
+
+## Environments that find themselves
+
+Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.yml` and nteract picks it up. Project-file detection runs through the daemon, resolves the dependencies your project declares, and launches the kernel against them. No `dx` step, no manual environment selection. `pixi` is now a first-class manager alongside `uv` and `conda`, and resolved environments get captured into notebook metadata so a later open can cache-hit instead of re-solving.
+
+## Native Intel Mac builds
+
+The release pipeline now ships `x86_64` macOS binaries next to the Apple Silicon ones. Intel Macs get a native build of the desktop app and the `runt` CLI, no Rosetta translation in the path.
 
 ## Full technical changelog
 
 <details>
 <summary>All 226 changes in 2.3</summary>
 
-### 2.3.4 — April 26, 2026
+### 2.3.4 - April 26, 2026
 
 #### Features
 
@@ -88,13 +102,13 @@ published: false
 
 - notebook metadata extras round-trip (#2198)([f6812fe](https://github.com/nteract/desktop/commit/f6812fe5cae9ff060a0b641b22175fb2406c41a7))
 
-### 2.3.1 — April 25, 2026
+### 2.3.1 - April 25, 2026
 
 #### Bug Fixes
 
 - mint UUIDs for ID-less cells so save/watch round-trips are stable (#2179) *(runtimed)*([fc8e1d0](https://github.com/nteract/desktop/commit/fc8e1d0a18c1dd7a7b2bf04f34892a417273b069))
 
-### 2.3.0 — April 24, 2026
+### 2.3.0 - April 24, 2026
 
 #### Features
 
