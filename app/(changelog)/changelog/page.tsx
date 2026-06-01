@@ -5,6 +5,11 @@ import { ChangelogFeedEntry } from "@/components/changelog/changelog-feed-entry"
 import { getAllEntries, includeDrafts } from "@/lib/changelog";
 import { absoluteUrl, siteConfig } from "@/lib/site";
 
+// Rendered at request time so the draft gate reads VERCEL_ENV at runtime
+// (it is not reliably exposed during the Vercel build). Production hides
+// drafts; dev and preview deployments show them.
+export const dynamic = "force-dynamic";
+
 const description =
   "Every nteract stable release, in human terms. What changed, why it matters, and what to try next.";
 

@@ -6,7 +6,6 @@ import { BlogTagList } from "@/components/blog/tag-list";
 import { Prose } from "@/components/prose";
 import {
   formatEntryDate,
-  getAllVersionParams,
   includeDrafts,
   resolveVersionParam,
 } from "@/lib/changelog";
@@ -18,14 +17,10 @@ type ChangelogVersionPageProps = {
   }>;
 };
 
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  const versions = await getAllVersionParams({
-    includeUnpublished: includeDrafts,
-  });
-  return versions.map((version) => ({ version }));
-}
+// Rendered at request time so the draft gate reads VERCEL_ENV at runtime
+// (it is not reliably exposed during the Vercel build). Production serves
+// only published versions; dev and preview deployments serve drafts too.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
