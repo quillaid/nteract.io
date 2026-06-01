@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
@@ -6,8 +7,8 @@ import { BlogTagList } from "@/components/blog/tag-list";
 import { Prose } from "@/components/prose";
 import {
   formatEntryDate,
-  includeDrafts,
   resolveVersionParam,
+  shouldShowDrafts,
 } from "@/lib/changelog";
 import { absoluteUrl } from "@/lib/site";
 
@@ -17,17 +18,18 @@ type ChangelogVersionPageProps = {
   }>;
 };
 
-// Rendered at request time so the draft gate reads VERCEL_ENV at runtime
-// (it is not reliably exposed during the Vercel build). Production serves
-// only published versions; dev and preview deployments serve drafts too.
+// Rendered at request time so the draft gate can read the request host.
+// Production (nteract.io) serves only published versions; dev and preview
+// deployments serve drafts too.
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: ChangelogVersionPageProps): Promise<Metadata> {
   const { version } = await params;
+  const host = (await headers()).get("host");
   const resolved = await resolveVersionParam(version, {
-    includeUnpublished: includeDrafts,
+    includeUnpublished: shouldShowDrafts(host),
   });
 
   if (!resolved || resolved.kind !== "canonical") {
@@ -66,8 +68,9 @@ export default async function ChangelogVersionPage({
   params,
 }: ChangelogVersionPageProps) {
   const { version } = await params;
+  const host = (await headers()).get("host");
   const resolved = await resolveVersionParam(version, {
-    includeUnpublished: includeDrafts,
+    includeUnpublished: shouldShowDrafts(host),
   });
 
   if (!resolved) {

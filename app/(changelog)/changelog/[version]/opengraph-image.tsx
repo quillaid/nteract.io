@@ -1,9 +1,10 @@
+import { headers } from "next/headers";
 import { ImageResponse } from "next/og";
 
 import {
   formatEntryDate,
   getEntryByVersion,
-  includeDrafts,
+  shouldShowDrafts,
 } from "@/lib/changelog";
 
 export const runtime = "nodejs";
@@ -17,8 +18,9 @@ export default async function OGImage({
   params: Promise<{ version: string }>;
 }) {
   const { version } = await params;
+  const host = (await headers()).get("host");
   const entry = await getEntryByVersion(version, {
-    includeUnpublished: includeDrafts,
+    includeUnpublished: shouldShowDrafts(host),
   });
 
   if (!entry) {

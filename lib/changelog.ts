@@ -290,14 +290,24 @@ export async function getAllVersionParams(
   return [...params];
 }
 
+const PRODUCTION_HOSTS = new Set(["nteract.io", "www.nteract.io"]);
+
 /**
- * Whether draft entries (published: false) should be visible. True in local
- * dev and on Vercel preview deployments, false in production. Lets a PR's
- * preview URL show the unseasoned backfill without leaking it to nteract.io.
+ * Whether draft entries (published: false) should be visible for a request.
+ * Visible in local dev and anywhere that is not the production domain (so
+ * Vercel preview deployments at *.vercel.app show the unseasoned backfill),
+ * hidden on nteract.io. Gated on the request host rather than VERCEL_ENV,
+ * which this project does not expose to app code.
  */
-export const includeDrafts =
-  process.env.NODE_ENV === "development" ||
-  process.env.VERCEL_ENV === "preview";
+export function shouldShowDrafts(host?: string | null): boolean {
+  if (process.env.NODE_ENV === "development") {
+    return true;
+  }
+  if (!host) {
+    return false;
+  }
+  return !PRODUCTION_HOSTS.has(host.split(":")[0].toLowerCase());
+}
 
 const dayFormatter = new Intl.DateTimeFormat("en", {
   month: "long",

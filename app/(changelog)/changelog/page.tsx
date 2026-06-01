@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 
 import { ChangelogFeedEntry } from "@/components/changelog/changelog-feed-entry";
-import { getAllEntries, includeDrafts } from "@/lib/changelog";
+import { getAllEntries, shouldShowDrafts } from "@/lib/changelog";
 import { absoluteUrl, siteConfig } from "@/lib/site";
 
-// Rendered at request time so the draft gate reads VERCEL_ENV at runtime
-// (it is not reliably exposed during the Vercel build). Production hides
-// drafts; dev and preview deployments show them.
+// Rendered at request time so the draft gate can read the request host.
+// Production (nteract.io) hides drafts; dev and preview deployments show them.
 export const dynamic = "force-dynamic";
 
 const description =
@@ -37,7 +37,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ChangelogPage() {
-  const entries = await getAllEntries({ includeUnpublished: includeDrafts });
+  const host = (await headers()).get("host");
+  const entries = await getAllEntries({
+    includeUnpublished: shouldShowDrafts(host),
+  });
 
   return (
     <div className="px-6 pb-24 pt-12 md:px-12">
