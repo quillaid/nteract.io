@@ -1,13 +1,15 @@
 import { ImageResponse } from "next/og";
 
-import { formatEntryDate, getEntryByVersion } from "@/lib/changelog";
+import {
+  formatEntryDate,
+  getEntryByVersion,
+  includeDrafts,
+} from "@/lib/changelog";
 
 export const runtime = "nodejs";
 export const alt = "nteract release";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-const isDev = process.env.NODE_ENV === "development";
 
 export default async function OGImage({
   params,
@@ -16,7 +18,7 @@ export default async function OGImage({
 }) {
   const { version } = await params;
   const entry = await getEntryByVersion(version, {
-    includeUnpublished: isDev,
+    includeUnpublished: includeDrafts,
   });
 
   if (!entry) {

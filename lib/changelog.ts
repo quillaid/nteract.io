@@ -290,6 +290,15 @@ export async function getAllVersionParams(
   return [...params];
 }
 
+/**
+ * Whether draft entries (published: false) should be visible. True in local
+ * dev and on Vercel preview deployments, false in production. Lets a PR's
+ * preview URL show the unseasoned backfill without leaking it to nteract.io.
+ */
+export const includeDrafts =
+  process.env.NODE_ENV === "development" ||
+  process.env.VERCEL_ENV === "preview";
+
 const dayFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
   day: "numeric",

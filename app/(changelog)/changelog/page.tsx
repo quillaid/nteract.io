@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ChangelogFeedEntry } from "@/components/changelog/changelog-feed-entry";
-import { getAllEntries } from "@/lib/changelog";
+import { getAllEntries, includeDrafts } from "@/lib/changelog";
 import { absoluteUrl, siteConfig } from "@/lib/site";
-
-const isDev = process.env.NODE_ENV === "development";
 
 const description =
   "Every nteract stable release, in human terms. What changed, why it matters, and what to try next.";
@@ -34,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ChangelogPage() {
-  const entries = await getAllEntries({ includeUnpublished: isDev });
+  const entries = await getAllEntries({ includeUnpublished: includeDrafts });
 
   return (
     <div className="px-6 pb-24 pt-12 md:px-12">

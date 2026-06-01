@@ -7,6 +7,7 @@ import { Prose } from "@/components/prose";
 import {
   formatEntryDate,
   getAllVersionParams,
+  includeDrafts,
   resolveVersionParam,
 } from "@/lib/changelog";
 import { absoluteUrl } from "@/lib/site";
@@ -17,12 +18,12 @@ type ChangelogVersionPageProps = {
   }>;
 };
 
-const isDev = process.env.NODE_ENV === "development";
-
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const versions = await getAllVersionParams({ includeUnpublished: isDev });
+  const versions = await getAllVersionParams({
+    includeUnpublished: includeDrafts,
+  });
   return versions.map((version) => ({ version }));
 }
 
@@ -31,7 +32,7 @@ export async function generateMetadata({
 }: ChangelogVersionPageProps): Promise<Metadata> {
   const { version } = await params;
   const resolved = await resolveVersionParam(version, {
-    includeUnpublished: isDev,
+    includeUnpublished: includeDrafts,
   });
 
   if (!resolved || resolved.kind !== "canonical") {
@@ -71,7 +72,7 @@ export default async function ChangelogVersionPage({
 }: ChangelogVersionPageProps) {
   const { version } = await params;
   const resolved = await resolveVersionParam(version, {
-    includeUnpublished: isDev,
+    includeUnpublished: includeDrafts,
   });
 
   if (!resolved) {
