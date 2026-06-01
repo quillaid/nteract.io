@@ -4,31 +4,30 @@ date: "2026-04-15T20:01:05Z"
 coversVersions:
   - "2.2.0"
 dateLabel: "April 15, 2026"
-title: "DataFrames Without the Bloat, Conda Without the Restart"
-summary: "DataFrames now stream through a blob store instead of bloating your notebook, conda kernels pick up new packages without a restart, and the whole app gets a warm Cream theme."
+title: "Throwaway Runtimes, Conda Without the Restart"
+summary: "Agents spin up ephemeral runtimes that close when they finish, conda kernels pick up new packages without a restart, and the whole app gets a warm Cream theme."
 highlights:
-  - "DataFrames render through Sift via the new dx library, keeping your .ipynb tiny"
+  - "Ephemeral notebooks let agents grab a runtime on demand and throw it away when done"
   - "Conda kernels hot-sync new dependencies without a restart"
   - "Whole-app Cream theme with first-party CodeMirror syntax highlighting"
-  - "Ephemeral notebooks let agents spin up throwaway sessions"
 tags:
-  - "Outputs"
+  - "Agents"
   - "Environments"
   - "Notebook editing"
-  - "Agents"
+  - "Desktop"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.2.0-stable.202604151939"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-2.2 is about getting big data and slow restarts out of your way.
+2.2 is about runtimes you don't have to manage and restarts you don't have to take.
 
-Two long-standing papercuts go away in this release. Returning a DataFrame used to dump megabytes of HTML straight into your `.ipynb`. Adding a package to a conda environment used to mean a kernel restart and losing your state. Both are fixed. The third headline is cosmetic but you'll see it everywhere: a warm Cream theme that covers the whole app, editor included.
+The headline is for agents. A runtime no longer has to be a thing you create, name, and clean up. An agent can spin one up on demand, run against it, and let it close when the work wraps. The second story kills a long-standing papercut: adding a package to a conda environment used to mean a kernel restart and a lost session. Not anymore. The third you'll see everywhere, a warm Cream theme that covers the whole app, editor included.
 
-## DataFrames render through Sift, not into your notebook
+## Ephemeral notebooks for agents
 
-The new `dx` library reroutes DataFrame display. Instead of serializing a table into base64 HTML inside your cell, `dx` hands the Arrow IPC data to a content-addressed blob store and renders it through Sift, a fast grid. Your `.ipynb` stays small, the cell stays responsive, and the notebook saves with blob references rather than inline bytes. pandas, polars, pyarrow, and narwhals wrappers all ride the same Arrow path. Agents reading the notebook get a compact `text/llm+plain` column summary, dtypes, ranges, distinct values, null counts, instead of raw table data. The kernel launcher calls `dx.install()` during bootstrap, so this is on without any import.
+`create_notebook` now defaults to ephemeral. The notebook lives only in memory, with no file on disk and no leftover state to sweep up. An agent grabs a runtime, does its work, and the session closes when it's done, more like a regular REPL than a document you have to save. When something is worth keeping, `save_notebook(path)` writes it out. Until then there's nothing to name and nothing to garbage-collect.
 
 ## Conda kernels hot-sync new dependencies
 

@@ -6,39 +6,44 @@ coversVersions:
   - "2.3.1"
   - "2.3.4"
 dateLabel: "April 24–26, 2026"
-title: "Tracebacks You Can Read, Environments That Find Themselves"
-summary: "Python errors render frame by frame, and your project's environment file becomes the kernel without any setup."
+title: "Environments That Find Themselves"
+summary: "Open a notebook next to a project file and nteract resolves the environment and launches the kernel for you. No setup step."
 highlights:
-  - "Rich tracebacks: errors render frame by frame with source context, your code split from library internals"
   - "Project files drive the kernel: pyproject.toml, pixi.toml, and environment.yml are detected and used automatically"
   - "pixi joins uv and conda as a first-class environment manager"
+  - "Prewarmed environment pools and captured-env caching mean a second open is a cache hit, not a re-solve"
   - "Native Intel Mac builds ship alongside Apple Silicon"
 tags:
-  - "Outputs"
   - "Environments"
+  - "Runtime"
   - "Desktop"
-  - "Agents"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.3.4-stable.202604261517"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-Two things get less annoying in 2.3: reading errors, and getting the right environment.
-
-Both used to need a person in the loop. A traceback was a wall of text you scanned by hand. An environment was something you set up before the notebook would run the way your project expected. 2.3 takes the manual step out of both.
-
-## Rich tracebacks
-
-When your code raises, nteract renders the traceback frame by frame instead of dumping a block of ANSI text. Your code is split from library internals, source context shows inline with the failing line highlighted, and deep stacks like a `RecursionError` collapse to head and tail so the payload stays readable. The kernel-launcher builds a structured payload and the notebook renders it, with one hard rule: if anything in that path fails, you still get the plain traceback. You never lose the error.
+2.3 is the environment release. Getting the right Python set up used to be a step you did before the notebook would run the way your project expected. 2.3 takes that step out.
 
 ## Environments that find themselves
 
-Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.yml` and nteract picks it up. Project-file detection runs through the daemon, resolves the dependencies your project declares, and launches the kernel against them. No `dx` step, no manual environment selection. `pixi` is now a first-class manager alongside `uv` and `conda`, and resolved environments get captured into notebook metadata so a later open can cache-hit instead of re-solving.
+Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.yml` and nteract picks it up. Detection walks up from the notebook directory, closest file wins, and the daemon resolves the dependencies your project declares and launches the kernel against them. No manual environment selection, no separate setup. The project file is the environment.
+
+## pixi joins uv and conda
+
+`pixi` is now a first-class manager alongside `uv` and `conda`, so all three project-file flavors resolve natively. `pyproject.toml` goes through `uv`, `pixi.toml` through `pixi`, `environment.yml` through `conda`. The `pixi` path talks to `rattler` directly instead of shelling out, so there's no `pixi` binary to install first.
+
+## Prewarmed pools and cached environments
+
+The daemon keeps a pool of prewarmed environments so a kernel launch claims a ready one instead of building from cold. Once an environment resolves, it gets captured into notebook metadata and the pool env is promoted to an inline cache. The second time you open that notebook, it's a cache hit, not a re-solve.
 
 ## Native Intel Mac builds
 
 The release pipeline now ships `x86_64` macOS binaries next to the Apple Silicon ones. Intel Macs get a native build of the desktop app and the `runt` CLI, no Rosetta translation in the path.
+
+## Rich tracebacks, behind a flag
+
+For the curious: 2.3 also lands the rich traceback renderer that splits your code from library internals and shows source context inline. It ships behind a feature flag, opt-in only. Enable it if you want to try it early. 2.5 flips it on for everyone by default.
 
 ## Full technical changelog
 

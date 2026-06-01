@@ -7,39 +7,38 @@ coversVersions:
   - "2.1.2"
   - "2.1.3"
 dateLabel: "April 6–9, 2026"
-title: "Agents Always On, Pixi In The Box"
-summary: "The runtime agent is on for every notebook now. Process-isolated. Pixi joins the defaults. Outputs render rich and read clean for agents."
+title: "Outputs An Agent Can Read"
+summary: "The start of repr-llm. Every rich output also synthesizes an agent-readable text summary, so an agent reading a chart gets a description instead of base64. Plus native renderers for Plotly, Vega, Leaflet, and more, and pixi as a first-class environment."
 highlights:
-  - "Agent mode is unconditional and runs in its own isolated process"
-  - "Pixi is a first-class Python environment, alongside uv and conda"
-  - "Add packages from the notebook with pixi add / uv add and inline deps"
+  - "Rich outputs synthesize a text/llm+plain summary for agents to read"
+  - "An agent looking at a Plotly chart or GeoJSON map gets a description, not base64"
   - "Plotly, Vega, Leaflet, LaTeX, audio, video, and PDF all render natively"
+  - "Pixi is a first-class Python environment, alongside uv and conda"
 tags:
+  - "Outputs"
   - "Agents"
   - "Environments"
-  - "Outputs"
-  - "Runtime"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.1.3-stable.202604090105"
 published: false
 # heroImage: "https://…"   # TODO: drop in a social image, OR use heroVideo below
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-2.1 is where the agent stops being a flag.
+2.1 is where outputs start reading back to agents.
 
-For a few releases the runtime agent was opt-in, gated behind a Feature Flags toggle. In 2.1 it goes unconditional and moves into its own process. The agent runs as a sync-only subprocess that drives execution over the shared CRDT, the same document your notebook UI reads from. So a human typing in a cell and an agent running cells see one consistent state, and a crash in agent land can't take the notebook with it. Around that core shift, 2.1 also makes Pixi a real environment option and fills out the output renderers.
+Until now, a rich output was a dead end for an agent. A Plotly chart, a GeoJSON map, a widget, all of it came back as base64 or a blob of markup, which is to say it came back as noise. 2.1 is the start of repr-llm: alongside the visual representation, every rich output also synthesizes a `text/llm+plain` summary. The agent gets a readable description of what the output actually shows. Around that, 2.1 also fills out the native renderers those summaries describe, and makes pixi a first-class environment.
 
-## Agent mode is always on, and isolated
+## Outputs an agent can read
 
-The agent is no longer something you switch on. Every notebook gets one, and it lives in a separate process that talks to the daemon as a Unix-socket peer. Execution flows through the `RuntimeStateDoc` CRDT keyed by execution id, so the agent and the editor never disagree about what ran or what came back. Kernel restarts and execution provenance are tracked agent-side, and `agent_mode` persists in the settings doc so it survives daemon restarts.
+This is the headline. Rich outputs now carry a second representation built for agents: a `text/llm+plain` summary synthesized at materialization. When a tool reads a cell's output, `text/llm+plain` sits at the top of the MIME priority list, ahead of `text/plain`, so an agent looking at a Plotly chart, a Vega plot, a GeoJSON map, an SVG, a large JSON blob, or an `ipywidgets` view gets a description of the content instead of a base64 payload it can't parse. If an output has no readable representation at all, the agent at least sees a note that something visual was produced. This is the beginning of the work, not the finished shape, but the core idea is in: visual for humans, readable for agents, from the same output.
+
+## Native rich-output renderers
+
+The summaries describe outputs that now render natively in the notebook. The output stack moved to a React renderer with daemon-served plugins, and 2.1 lights up Plotly, Vega and Vega-Lite, Leaflet-backed GeoJSON, LaTeX through KaTeX, plus audio, video, PDF, and JavaScript. These pair directly with repr-llm: the same chart a human sees rendered is the one an agent reads summarized.
 
 ## Pixi is a first-class environment
 
 Pixi joins uv and conda as a default Python environment. 2.1 wires it end to end: `pixi run` kernel launch, real pool warming against managed `pixi.toml` envs via rattler, `[tool.pixi]` detection, drift checks, and a dependency panel in the header that shows what's declared. You can add packages straight from the notebook with `pixi add` and `uv add`, and inline deps reuse a warm pool env instead of rebuilding from scratch. PEP 723 script metadata is honored too.
-
-## Rich outputs, and agents that can read them
-
-The output stack moves to a React renderer with daemon-served plugins. Plotly, Vega and Vega-Lite, Leaflet-backed GeoJSON, LaTeX through KaTeX, plus audio, video, PDF, and JavaScript all render natively now. The other half of this is for agents: every visual output also synthesizes a `text/llm+plain` summary, so an agent looking at a Plotly chart or a GeoJSON map gets a readable description instead of a blob of base64.
 
 ## Full technical changelog
 
