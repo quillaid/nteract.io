@@ -7,11 +7,11 @@ coversVersions:
   - "2.1.2"
   - "2.1.3"
 dateLabel: "April 6–9, 2026"
-title: "Outputs An Agent Can Read"
-summary: "The start of repr-llm. Every rich output also synthesizes an agent-readable text summary, so an agent reading a chart gets a description instead of base64. Plus native renderers for Plotly, Vega, Leaflet, and more, and pixi as a first-class environment."
+title: "Outputs for Agents, Outputs for Humans"
+summary: "This begins repr llm. Plotly, Vega, Leaflet, and more are supported for both humans and agent views. Native rendering for humans, text/plain+llm for agents."
 highlights:
   - "Rich outputs synthesize a text/llm+plain summary for agents to read"
-  - "An agent looking at a Plotly chart or GeoJSON map gets a description, not base64"
+  - "An agent looking at a Plotly chart or GeoJSON map gets a description"
   - "Plotly, Vega, Leaflet, LaTeX, audio, video, and PDF all render natively"
   - "Pixi is a first-class Python environment, alongside uv and conda"
 tags:
@@ -26,19 +26,23 @@ heroImage: "https://img.runt.run/2026/06/01/4d15812b943d.png" # placeholder, swa
 
 2.1 is where outputs start reading back to agents.
 
-Until now, a rich output was a dead end for an agent. A Plotly chart, a GeoJSON map, a widget, all of it came back as base64 or a blob of markup, which is to say it came back as noise. 2.1 is the start of repr-llm: alongside the visual representation, every rich output also synthesizes a `text/llm+plain` summary. The agent gets a readable description of what the output actually shows. Around that, 2.1 also fills out the native renderers those summaries describe, and makes pixi a first-class environment.
+This release brings rich outputs for people and agents alike. Now with Pixi support!
 
-## Outputs an agent can read
+## Outputs for Humans
 
-This is the headline. Rich outputs now carry a second representation built for agents: a `text/llm+plain` summary synthesized at materialization. When a tool reads a cell's output, `text/llm+plain` sits at the top of the MIME priority list, ahead of `text/plain`, so an agent looking at a Plotly chart, a Vega plot, a GeoJSON map, an SVG, a large JSON blob, or an `ipywidgets` view gets a description of the content instead of a base64 payload it can't parse. If an output has no readable representation at all, the agent at least sees a note that something visual was produced. This is the beginning of the work, not the finished shape, but the core idea is in: visual for humans, readable for agents, from the same output.
+<!-- TODO: Show plotly, vega, leaflet, latex -->
 
-## Native rich-output renderers
+![](https://img.runt.run/2026/06/01/4d15812b943d.png)
 
-The summaries describe outputs that now render natively in the notebook. The output stack moved to a React renderer with daemon-served plugins, and 2.1 lights up Plotly, Vega and Vega-Lite, Leaflet-backed GeoJSON, LaTeX through KaTeX, plus audio, video, PDF, and JavaScript. These pair directly with repr-llm: the same chart a human sees rendered is the one an agent reads summarized.
+Just like the OG Electron app, nteract supports Plotly, Vega, Vega-Lite, and GeoJSON. These are native JSON formats with rich renderings, allowing your notebooks to be compact while you get full interactivity.
+
+## Outputs for Agents
+
+Until now, rich outputs were a dead end for agents. They either had to sift through large plotly html, get no visibility of widgets, or recieve massive base64 encoded gunk. 2.1 marks the start of the repr-llm crate. Alongside the visual representation, every rich output also synthesiszes a `text/llm+plain` summary. When an agent connects via the nteract mcp, they see a text-readable description of what the output shows. If an output has no readable representation at all, the agent at least sees a note that something visual was produced.
 
 ## Pixi is a first-class environment
 
-Pixi joins uv and conda as a default Python environment. 2.1 wires it end to end: `pixi run` kernel launch, real pool warming against managed `pixi.toml` envs via rattler, `[tool.pixi]` detection, drift checks, and a dependency panel in the header that shows what's declared. You can add packages straight from the notebook with `pixi add` and `uv add`, and inline deps reuse a warm pool env instead of rebuilding from scratch. PEP 723 script metadata is honored too.
+Pixi joins uv and conda as a default Python environment. Within 2.1, it's wired end to end: `pixi run` kernel launch, real pool warming against managed `pixi.toml` envs, `[tool.pixi]` detection, drift checks, and a dependency panel in the header that shows what's declared. You can add packages straight from the notebook UI, rely on your warming pool, and even use PEP 723 script metadata.
 
 ## Full technical changelog
 
