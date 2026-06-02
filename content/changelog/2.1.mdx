@@ -38,7 +38,7 @@ Just like the OG Electron app, nteract supports Plotly, Vega, Vega-Lite, and Geo
 
 ## Outputs for Agents
 
-Until now, rich outputs were a dead end for agents. They either had to sift through large plotly html, get no visibility of widgets, or recieve massive base64 encoded gunk. 2.1 marks the start of the repr-llm crate. Alongside the visual representation, every rich output also synthesiszes a `text/llm+plain` summary. When an agent connects via the nteract mcp, they see a text-readable description of what the output shows. If an output has no readable representation at all, the agent at least sees a note that something visual was produced.
+Until now, rich outputs were a dead end for agents. They either had to sift through large plotly html, get no visibility of widgets, or receive massive base64 encoded gunk. 2.1 marks the start of the repr-llm crate. Alongside the visual representation, every rich output also synthesizes a `text/llm+plain` summary. When an agent connects via the nteract mcp, they see a text-readable description of what the output shows. If an output has no readable representation at all, the agent at least sees a note that something visual was produced.
 
 ## Pixi is a first-class environment
 
