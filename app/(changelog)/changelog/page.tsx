@@ -63,6 +63,12 @@ export default async function ChangelogPage() {
             ← Home
           </Link>
           <div className="h-px flex-grow bg-[var(--rule)]" />
+          <Link
+            href="/changelog/print"
+            className="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)] transition-colors hover:text-[var(--ink)]"
+          >
+            Print
+          </Link>
           <a
             href="/changelog/feed.xml"
             className="font-mono text-[11px] uppercase tracking-widest text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
