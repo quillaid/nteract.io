@@ -12,28 +12,26 @@ coversVersions:
   - "2.4.8"
 dateLabel: "May 2–14, 2026"
 title: "Runtimed in Node, a REPL for Pi Agents"
-summary: "@runtimed/node opens the daemon behind the desktop app to any Node runtime, and @nteract/pi uses it to give pi.dev agents a real persistent Python REPL. Driveable from JavaScript. DataFrame output grows up alongside."
+summary: "@runtimed/node opens the daemon behind the desktop app to any Node runtime, and @nteract/pi uses it to give pi.dev agents a real persistent Python REPL."
 highlights:
   - "@runtimed/node exposes the runtimed daemon to Node: create notebooks, run cells, read outputs"
   - "@nteract/pi gives pi.dev agents a persistent, notebook-backed Python REPL, installed with pi install npm:@nteract/pi"
-  - "DataFrames render with rich types, inline images, and Arrow IPC under the hood"
-  - "Outputs get a mode strip: compact, expanded, or focused per cell"
 tags:
-  - "Runtime"
-  - "Agents"
-  - "Outputs"
-  - "Environments"
+  - "node.js"
+  - "agents"
+  - "pi"
+  - "runtimed"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.4.8-stable.202605142308"
 published: false
 heroImage: "https://img.runt.run/2026/06/01/bc866908d0f8.png" # placeholder, swap for a real screenshot or clip
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-Eight patch releases folded into one. The throughline is one new package: the runtime that powers the desktop app is now embeddable from Node.
+It's IPython in your pi agent!
 
 ## The runtimed daemon, now from Node
 
-`@runtimed/node` is the Node.js binding for `runtimed`, the same daemon behind the nteract desktop app. Anything Node, Bun, or another CommonJS runtime can now talk to the local daemon directly: `createNotebook`, run and queue cells, read outputs, sync dependencies, save notebooks, and open a live session in the desktop app. It is a thin JavaScript wrapper over a native binding, with the platform `.node` shipped as an optional install. The point is that the runtime stops being desktop-only. The persistent kernels, hot dependency sync with `uv`, and warm environment pools that the app relies on are all reachable from a script.
+`@runtimed/node` is the Node.js binding for `runtimed`, the same daemon behind the nteract app. Node.js, Deno, and Bun can now talk to the local daemon directly with FFI bindings for runtimed. create notebooks, run and queue cells, read outputs, sync dependencies, save notebooks, and open a live session in the desktop app. It is a thin JavaScript wrapper over a native binding, with the platform `.node` shipped as an optional install. The persistent kernels, hot dependency sync with `uv`, and warm environment pools that the app relies on are all reachable from a script.
 
 That is what makes a real agent harness possible on top of nteract, not a shim around a subprocess. The harness drives an actual IPython kernel through the daemon, so kernel state, environments, and outputs are the same objects the desktop app sees.
 
@@ -41,13 +39,9 @@ That is what makes a real agent harness possible on top of nteract, not a shim a
 
 `@nteract/pi` is the first thing built on `@runtimed/node`, and it is the reason this matters now. It gives a pi.dev agent a persistent, notebook-backed Python REPL through four tools: `python_repl` runs code in an IPython kernel whose variables, imports, and figures survive across turns, `python_add_dependencies` installs packages mid-session with no restart, `python_save_notebook` exports the session to an `.ipynb` you can open in nteract or Jupyter, and `/python-reset` starts clean. Install it with `pi install npm:@nteract/pi`. Because it rides the daemon, environments stay warm per working directory, so there are no cold starts, and the state an agent builds up is the same runtime the desktop app can open and inspect.
 
-## DataFrames that describe themselves
+## [Feature flag] DataFrames that describe themselves
 
-DataFrame output grew up this cycle. Tables now travel as Arrow IPC payloads with a manifest, so the frontend reads the same typed columns the kernel produced. HuggingFace rich types flow end to end, which means an image column from a parquet dataset renders inline in the table instead of as a blob of bytes. Long text rows collapse by default and expand on click. The manifest also carries precomputed hints, so an agent reading the output gets a useful summary without pulling the whole frame.
-
-## Output modes, per cell
-
-Each output now has a mode strip: compact, expanded, or focused. Compact keeps a busy notebook scannable. Focused hands the output its own scroll and sizing, which is what makes a large table or an interactive iframe usable inline. Focus is magnetic now, it sticks until you click elsewhere instead of dropping the moment your pointer leaves. Small outputs lose their chrome entirely.
+If using the dx feature flag, there is an experimental table viewer for dataframes. Tabular data travels as Arrow IPC payloads with a manifest allowing the forntend to read the same typed columns the kernel produced. Beyond the basic polars and pandas we all know and love, HuggingFace `datasets` has rich types for image columns in their parquet. Sift is able to render these images inline in the table instead of as a blob of bytes. Following up on our previous work to have `repr`s for LLMs, this brings precomputed hints so that agents can read a useful summary before pulling the whole dataframe.
 
 ## Full technical changelog
 
