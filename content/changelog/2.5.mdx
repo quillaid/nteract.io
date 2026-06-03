@@ -5,39 +5,46 @@ coversVersions:
   - "2.5.0"
   - "2.5.1"
 dateLabel: "May 26, 2026"
-title: "Hidden Secrets, Sift DataFrames"
-summary: "The nteract launcher is now the default, bringing rich Python tracebacks, DataFrames in the Sift explorer, and secrets kept out of your outputs."
+title: "Sift DataFrames, Rich Tracebacks, Secret Scrubbing"
+summary: "DataFrames render in Sift, tracebacks are rich and navigable, and secret env values get scrubbed from outputs."
 highlights:
-  - "The nteract launcher runs by default now (legacy launcher is opt-out)"
   - "Python errors render as rich, structured tracebacks"
-  - "DataFrames open in Sift, an interactive crossfilter explorer"
+  - "DataFrames render in Sift, an interactive crossfilter explorer"
   - "Outputs scrub secret-looking environment values to [redacted env]"
 tags:
-  - "Outputs"
-  - "Agents"
-  - "Collaboration"
-  - "Environments"
+  - "arrow"
+  - "pretext"
+  - "polars"
+  - "pandas"
 githubReleaseUrl: "https://github.com/nteract/nteract/releases/tag/v2.5.1-stable.202605261941"
 published: false
 heroImage: "https://img.runt.run/2026/06/01/283f94f57b2f.png" # placeholder, swap for a real screenshot or clip
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-The headline of 2.5 isn't in the commit list. It's one flag.
-
-The **nteract launcher** is now the default. The launcher that used to be opt-in runs for everyone, with a legacy-launcher escape hatch if you need it. That single flip is the story, because the launcher is what makes three things real in every notebook.
+This release brings our cross filtering data explorer built on [pretext](https://chenglou.me/pretext/) and [Apache Arrow](https://arrow.apache.org/) to every dataframe in Python: `pandas`, `polars`, `datasets`, `narwhals`, `duckdb`, maybe more.
 
 ## Rich tracebacks
 
-Python errors stop being a wall of ANSI text. The launcher emits a structured traceback that nteract renders frame by frame: your code split from library internals, source context and line numbers inline, the noise filtered out.
+{/* TODO: Add traceback GIF */}
+
+Python errors now render as structured, navigable tracebacks. Stack frames are collapsible and you get direct links back to your cells.
 
 ## DataFrames open in Sift
 
-Return a DataFrame and it renders in **Sift**, an interactive crossfilter explorer. Histograms and category bars live in the column headers, you brush-filter across columns at once, and it stays smooth well past 100k rows (Arrow IPC and WASM underneath). No `dx` package, nothing to import.
+{/* TODO: Add DataFrame GIF */}
+
+Return (or `display`!) a DataFrame and it renders in _Sift_, an interactive data explorer. The sparklines and category bars in the column headings allow you to brush filter across columns with smooth interactions thanks to Arrow IPC and WASM.
 
 ## Secrets stay out of outputs
 
-2.5 also pulls your login-shell environment into kernels, so the `PATH` and variables you actually have set are there. Redaction is the safety valve: before any output leaves the kernel, values that look like secrets are scrubbed to `[redacted env]`. Your shell's secrets are available to your code, but they don't leak into a shared notebook or an agent's view. On by default, per-kernel opt-out.
+{/* TODO: Screenshot of output having secret */}
+
+Ever leak an environment variable that had a secret inside a notebook? Now that agents are reading outputs into chat logs, that problem can compound.
+
+nteract 2.5 brings your login shell env into kernels. You get your `PATH` and API keys and those values are scrubbed from outputs before they hit disk or an agent's context window. Your shell's secrets are available to your code, but they don't leak into a shared notebook or agent's view.
+
+Note: this feature can be disabled in settings.
 
 ## Full technical changelog
 
