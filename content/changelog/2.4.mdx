@@ -10,7 +10,7 @@ coversVersions:
   - "2.4.6"
   - "2.4.7"
   - "2.4.8"
-dateLabel: "May 2–14, 2026"
+dateLabel: "May 2, 2026"
 title: "IPython REPL for Pi Agents"
 summary: "@runtimed/node opens the daemon behind the nteract desktop app to any Node runtime, and @nteract/pi uses it to give pi.dev agents a persistent Python REPL with notebook memory."
 highlights:
@@ -46,7 +46,15 @@ That is what makes a real agent harness possible on top of nteract, not a shim a
 pi install npm:@nteract/pi
 ```
 
-`@nteract/pi` is the first thing built on `@runtimed/node`, and it is the reason this matters now. It gives a pi.dev agent a persistent, notebook-backed Python REPL through four tools: `python_repl` runs code in an IPython kernel whose variables, imports, and figures survive across turns, `python_add_dependencies` installs packages mid-session with no restart, `python_save_notebook` exports the session to an `.ipynb` you can open in nteract or Jupyter, and `/python-reset` starts clean. Install it with `pi install npm:@nteract/pi`. Because it rides the daemon, environments stay warm per working directory, so there are no cold starts, and the state an agent builds up is the same runtime the desktop app can open and inspect.
+{/* Sweet screenshot here */}
+
+The Pi harness is really fun to hack on. We could have just given you the nteract mcp and called it a day. Since Pi is so hackable, I figured it was time to show how once you free yourself from the shackles of other harnesses, you can create brand new blends of experiences. I wanted a full synthesis of IPython and chat all in one.
+
+The nteract extension for pi gives your agent a persistent notebook-backed Python REPL, allowing it to run code in an IPython session. You get to see plots inline in chat while your model gets to read them directly too. It's more like AIPython, am I right (sorry, I had to). Best part is variables survive across turns. No more `python3 -c` to keep reloading the same parquet file or make the same query. Just reuse it.
+
+Now, the tools given to the pi extension are purposefully minimal to begin with. Run code, manage dependencies, save notebook, and "reset" (start a new session). You're free to build your own workflow by asking your agent to hack on `@runtimed/node`. It can pair with you in your notebook, use it for its own research, or even use a notebook as a communication mechanism across other agents.
+
+Happy hacking! Let us know what you build.
 
 ## [Feature flag] DataFrames that describe themselves
 
