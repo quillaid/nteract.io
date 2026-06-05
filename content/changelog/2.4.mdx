@@ -11,11 +11,12 @@ coversVersions:
   - "2.4.7"
   - "2.4.8"
 dateLabel: "May 2–14, 2026"
-title: "Runtimed in Node, a REPL for Pi Agents"
-summary: "@runtimed/node opens the daemon behind the desktop app to any Node runtime, and @nteract/pi uses it to give pi.dev agents a real persistent Python REPL."
+title: "IPython REPL for Pi Agents"
+summary: "@runtimed/node opens the daemon behind the nteract desktop app to any Node runtime, and @nteract/pi uses it to give pi.dev agents a persistent Python REPL with notebook memory."
 highlights:
   - "@runtimed/node exposes the runtimed daemon to Node: create notebooks, run cells, read outputs"
   - "@nteract/pi gives pi.dev agents a persistent, notebook-backed Python REPL, installed with pi install npm:@nteract/pi"
+  - "Ask your pi agent to hack with @runtimed/node and build you what you need"
 tags:
   - "node.js"
   - "agents"
@@ -31,17 +32,25 @@ It's IPython in your pi agent!
 
 ## The runtimed daemon, now from Node
 
-`@runtimed/node` is the Node.js binding for `runtimed`, the same daemon behind the nteract app. Node.js, Deno, and Bun can now talk to the local daemon directly with FFI bindings for runtimed. create notebooks, run and queue cells, read outputs, sync dependencies, save notebooks, and open a live session in the desktop app. It is a thin JavaScript wrapper over a native binding, with the platform `.node` shipped as an optional install. The persistent kernels, hot dependency sync with `uv`, and warm environment pools that the app relies on are all reachable from a script.
+```
+npm install @runtimed/node
+```
+
+`@runtimed/node` is the Node.js binding for `runtimed`, the same daemon behind the nteract app. Node.js, Deno, and Bun can now talk to the local daemon directly with FFI bindings for runtimed. Create notebooks, run cells, read outputs, sync dependencies, save notebooks, and open a live session in the desktop app. It is a thin JavaScript wrapper over a native binding, with the platform `.node` shipped as an optional install. The persistent kernels, hot dependency sync with `uv`, and warm environment pools that the app relies on are all reachable from a script.
 
 That is what makes a real agent harness possible on top of nteract, not a shim around a subprocess. The harness drives an actual IPython kernel through the daemon, so kernel state, environments, and outputs are the same objects the desktop app sees.
 
 ## A Python REPL for pi.dev agents
 
+```
+pi install npm:@nteract/pi
+```
+
 `@nteract/pi` is the first thing built on `@runtimed/node`, and it is the reason this matters now. It gives a pi.dev agent a persistent, notebook-backed Python REPL through four tools: `python_repl` runs code in an IPython kernel whose variables, imports, and figures survive across turns, `python_add_dependencies` installs packages mid-session with no restart, `python_save_notebook` exports the session to an `.ipynb` you can open in nteract or Jupyter, and `/python-reset` starts clean. Install it with `pi install npm:@nteract/pi`. Because it rides the daemon, environments stay warm per working directory, so there are no cold starts, and the state an agent builds up is the same runtime the desktop app can open and inspect.
 
 ## [Feature flag] DataFrames that describe themselves
 
-If using the dx feature flag, there is an experimental table viewer for dataframes. Tabular data travels as Arrow IPC payloads with a manifest allowing the forntend to read the same typed columns the kernel produced. Beyond the basic polars and pandas we all know and love, HuggingFace `datasets` has rich types for image columns in their parquet. Sift is able to render these images inline in the table instead of as a blob of bytes. Following up on our previous work to have `repr`s for LLMs, this brings precomputed hints so that agents can read a useful summary before pulling the whole dataframe.
+We've started rolling out an experimental table viewer for dataframes. I've always wanted to make a more arrow-native notebook that allows you to go straight from dataframe to visuals with minimal interference. That's starting to be a reality. In this release, if you have the dx feature flag enabled (check your settings), tables travel over as Parquet or Arrow IPC with a manifest to allow clients (AKA Frontends and MCP) to read the same typed columns the runtime produced. This is hooked up for `polars`, `pandas`, and HuggingFace's `datasets`. We've taken the `datasets` feature even further by rendering their image columns directly in the viewer. Following up on our previous work to have `repr`s for LLMs, this brings precomputed hints so that agents can read a useful summary before pulling the whole dataframe.
 
 ## Full technical changelog
 
