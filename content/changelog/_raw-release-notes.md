@@ -418,7 +418,7 @@ Download tables, asset lists, commit-SHA footers, and install boilerplate have b
 ### 2.4.7 — May 12, 2026
 ### Bug Fixes
 
-- use codex-local nteract MCP config (#2613) *(plugins)*([0d9d14d](https://github.com/nteract/desktop/commit/0d9d14d5cb526028abf5a8da3fbd344abeb300b2))
+- use codex-local nteract-mcp config (#2613) *(plugins)*([0d9d14d](https://github.com/nteract/desktop/commit/0d9d14d5cb526028abf5a8da3fbd344abeb300b2))
 - resume runtimed binding publishing (#2614) *(release)*([a1a3b33](https://github.com/nteract/desktop/commit/a1a3b33b3cff4b7436c530372d1eb87333a86522))
 - keep tail outputs reachable (#2617) *(notebook)*([e8de12a](https://github.com/nteract/desktop/commit/e8de12a51ce75b186faba047440e2adf98194cb6))
 - strip RUNTIMED_* from inherited env on child spawn (#2618) *(runt-mcp-proxy)*([a8713e1](https://github.com/nteract/desktop/commit/a8713e1ca6cf19068bfb5ddae36d1cbe0989ed63))
