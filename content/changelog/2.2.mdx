@@ -5,11 +5,11 @@ coversVersions:
   - "2.2.0"
 dateLabel: "April 15, 2026"
 title: "Throwaway Runtimes, Conda Without the Restart"
-summary: "Agents spin up ephemeral runtimes that close when they finish, conda kernels pick up new packages without a restart, and the whole app gets a warm Cream theme."
+summary: "Agents spin up ephemeral runtimes that close when they finish, conda kernels pick up new packages without a restart, and the whole app gets a warm cream theme."
 highlights:
   - "Ephemeral notebooks let agents grab a runtime on demand and throw it away when done"
   - "Conda kernels hot-sync new dependencies without a restart"
-  - "Whole-app Cream theme with first-party CodeMirror syntax highlighting"
+  - "Whole-app Cream theme"
 tags:
   - "Agents"
   - "Environments"
@@ -23,19 +23,17 @@ heroImage: "https://img.runt.run/2026/06/01/ce252905c39d.png" # placeholder, swa
 
 2.2 is about runtimes you don't have to manage and restarts you don't have to take.
 
-The headline is for agents. A runtime no longer has to be a thing you create, name, and clean up. An agent can spin one up on demand, run against it, and let it close when the work wraps. The second story kills a long-standing papercut: adding a package to a conda environment used to mean a kernel restart and a lost session. Not anymore. The third you'll see everywhere, a warm Cream theme that covers the whole app, editor included.
-
 ## Ephemeral notebooks for agents
 
-`create_notebook` now defaults to ephemeral. The notebook lives only in memory, with no file on disk and no leftover state to sweep up. An agent grabs a runtime, does its work, and the session closes when it's done, more like a regular REPL than a document you have to save. When something is worth keeping, `save_notebook(path)` writes it out. Until then there's nothing to name and nothing to garbage-collect.
+Based on agents using notebooks like their own throwaway sandbox, nteract introduced ephemeral notebooks. An agent can spin one up on demand, run against it, and it all gets cleaned up when the agent disconnects. If they need to save it, it gets upgraded. No loose Untitled229.ipynb. The notebook lives only in memory, with no file on disk and no leftover state to sweep up. An agent or automated job can grab a runtime, get some work done. It's more like a regular REPL than a document you have to think about saving. Which, well, if you want to keep something you can always `save_notebook` and it's no longer ephemeral. Just a quick little upgrade.
 
 ## Conda kernels hot-sync new dependencies
 
-Inline dependency hot-sync now works for conda environments, not just `uv`. Add a package to a running conda kernel and the environment syncs in place, no restart, no lost variables. Lock files for conda and pixi get persisted too, so an environment can be recreated offline later. Environment resolution itself went offline-first this release, so a flaky network at launch time is far less likely to block you.
+Inline dependency hot-sync now works for conda environments, not just `uv`. Add a package to a running conda kernel and the environment syncs in place, no restart, no lost variables. Environment resolution itself went offline-first this release, so a flaky network at launch time is far less likely to block you.
 
 ## A whole-app Cream theme
 
-Cream is a new warm color theme that covers the entire app, not just output. The editor moved to first-party CodeMirror themes and swapped Prism for Lezer static highlighting, so syntax colors are consistent and theme-aware across Classic and Cream. There's a theme picker to switch between them.
+In service to our super-secret data explorer we've added a new warm color theme that covers the entire app. New CodeMirror themes and swapped Prism for Lezer so all our static hightlighting uses the same CodeMirror setup. Find it in settings to try out the dark and light modes.
 
 ## Full technical changelog
 
