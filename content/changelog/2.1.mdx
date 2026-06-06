@@ -40,9 +40,12 @@ Just like the OG Electron app, nteract supports Plotly, Vega, Vega-Lite, and Geo
 
 Until now, rich outputs were a dead end for agents. They either had to sift through large Plotly html, get no visibility of widgets, or receive massive base64-encoded gunk. 2.1 marks the start of the repr-llm crate. Alongside the visual representation, every rich output also synthesizes a `text/llm+plain` summary. When an agent connects via the nteract mcp, they see a text-readable description of what the output shows. If an output has no readable representation at all, the agent at least sees a note that something visual was produced.
 
+
 ## Pixi is a first-class environment
 
 Pixi joins uv and conda as a default Python environment. Within 2.1, it's wired end to end: `pixi run` kernel launch, real pool warming against managed `pixi.toml` envs, `[tool.pixi]` detection, drift checks, and a dependency panel in the header that shows what's declared. You can add packages straight from the notebook UI, rely on your warming pool, and even use PEP 723 script metadata.
+
+No matter which environment you choose, your agent should be in your corner using your package manager of choice!
 
 ## Full technical changelog
 
