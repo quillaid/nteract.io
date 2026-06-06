@@ -7,11 +7,11 @@ coversVersions:
   - "2.3.4"
 dateLabel: "April 24, 2026"
 title: "Environments That Find Themselves"
-summary: "Open a notebook next to a project file and nteract resolves the environment and launches the kernel for you. No setup step."
+summary: "Now nteract resolves environments from projects: pyproject.toml, environment.yaml, and pixi.toml. No more futzing with kernel definitons. Use your projects!"
 highlights:
-  - "Project files drive the kernel: pyproject.toml, pixi.toml, and environment.yml are detected and used automatically"
+  - "Project files drive the kernel: pyproject.toml, pixi.toml, and environment.yml detected and used automatically"
   - "pixi joins uv and conda as a first-class environment manager"
-  - "Prewarmed environment pools and captured-env caching mean a second open is a cache hit, not a re-solve"
+  - "Prewarmed environment pools and captured-env caching"
   - "Native Intel Mac builds ship alongside Apple Silicon"
 tags:
   - "Environments"
@@ -23,27 +23,25 @@ heroImage: "https://img.runt.run/2026/06/01/6b724f5f4357.png" # placeholder, swa
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-2.3 is the environment release. Getting the right Python set up used to be a step you did before the notebook would run the way your project expected. 2.3 takes that step out.
+It's time to double down on environments and projects. Notebooks typically required you to set them up for your project. Now it's the other way because the project drives the kernel.
 
 ## Environments that find themselves
 
-Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.yml` and nteract picks it up. Detection walks up from the notebook directory, closest file wins, and the daemon resolves the dependencies your project declares and launches the kernel against them. No manual environment selection, no separate setup. The project file is the environment.
+Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.yml` and nteract picks it up. Detection walks up from the notebook directory, closest project wins, and the notebook uses your environment. No manual environment selection, no kernel setup.
 
 ## pixi joins uv and conda
 
-`pixi` is now a first-class manager alongside `uv` and `conda`, so all three project-file flavors resolve natively. `pyproject.toml` goes through `uv`, `pixi.toml` through `pixi`, `environment.yml` through `conda`. The `pixi` path talks to `rattler` directly instead of shelling out, so there's no `pixi` binary to install first.
+{/* A new challenger! */}
+
+`pixi` is now a first-class manager alongside `uv` and `conda`. Use it with inline deps in your notebooks or craft a `pixi.toml` to be declarative.
 
 ## Prewarmed pools and cached environments
 
-The daemon keeps a pool of prewarmed environments so a kernel launch claims a ready one instead of building from cold. Once an environment resolves, it gets captured into notebook metadata and the pool env is promoted to an inline cache. The second time you open that notebook, it's a cache hit, not a re-solve.
+In order to make time-to-first execution fast, reproducible, and isolated nteract keeps a pool of prewarmed environments. Any kernel launch with a fresh notebook (not in a project directory, mind you) claims a ready one instead of building from cold. Once an environment resolves, it gets captured into notebook metadata and the pool env is promoted to be "for" that notebook. Second time you open that notebook it's a cache hit, not a re-solving of an environment.
 
 ## Native Intel Mac builds
 
-The release pipeline now ships `x86_64` macOS binaries next to the Apple Silicon ones. Intel Macs get a native build of the desktop app and the `runt` CLI, no Rosetta translation in the path.
-
-## Rich tracebacks, behind a flag
-
-For the curious: 2.3 also lands the rich traceback renderer that splits your code from library internals and shows source context inline. It ships behind a feature flag, opt-in only. Enable it if you want to try it early. 2.5 flips it on for everyone by default.
+We're shipping `x86_64` macOS binaries next to the Apple Silicon ones. This may not last forever, but for the users that asked this is for you!
 
 ## Full technical changelog
 
