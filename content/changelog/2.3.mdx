@@ -7,7 +7,7 @@ coversVersions:
   - "2.3.4"
 dateLabel: "April 24, 2026"
 title: "Environments That Find Themselves"
-summary: "Now nteract resolves environments from projects: pyproject.toml, environment.yaml, and pixi.toml. No more futzing with kernel definitons. Use your projects!"
+summary: "Now nteract resolves environments from projects: pyproject.toml, environment.yaml, and pixi.toml. No more futzing with kernel definitions. Use your projects!"
 highlights:
   - "Project files drive the kernel: pyproject.toml, pixi.toml, and environment.yml detected and used automatically"
   - "pixi joins uv and conda as a first-class environment manager"
@@ -23,7 +23,7 @@ heroImage: "https://img.runt.run/2026/06/01/6b724f5f4357.png" # placeholder, swa
 # heroVideo: "https://…"   # TODO: a short demo clip (autoplays muted/looped)
 ---
 
-It's time to double down on environments and projects. Notebooks typically required you to set them up for your project. Now it's the other way because the project drives the kernel.
+It's time to double down on environments and projects. Notebooks typically required you to set them up for your project. Now it's the other way around because the project drives the kernel.
 
 ## Environments that find themselves
 
@@ -37,11 +37,11 @@ Open a notebook next to a `pyproject.toml`, a `pixi.toml`, or an `environment.ym
 
 ## Prewarmed pools and cached environments
 
-In order to make time-to-first execution fast, reproducible, and isolated nteract keeps a pool of prewarmed environments. Any kernel launch with a fresh notebook (not in a project directory, mind you) claims a ready one instead of building from cold. Once an environment resolves, it gets captured into notebook metadata and the pool env is promoted to be "for" that notebook. Second time you open that notebook it's a cache hit, not a re-solving of an environment.
+In order to make time-to-first execution fast, reproducible, and isolated, nteract keeps a pool of prewarmed environments. Any kernel launch with a fresh notebook (not in a project directory, mind you) claims a ready one instead of building from cold. Once an environment resolves, it gets captured into notebook metadata and the pool env is promoted to be "for" that notebook. The second time you open that notebook it's a cache hit, not a re-solving of an environment.
 
 ## Native Intel Mac builds
 
-We're shipping `x86_64` macOS binaries next to the Apple Silicon ones. This may not last forever, but for the users that asked this is for you!
+We're shipping `x86_64` macOS binaries next to the Apple Silicon ones. This may not last forever, but for the users that asked, this is for you!
 
 ## Full technical changelog
 
